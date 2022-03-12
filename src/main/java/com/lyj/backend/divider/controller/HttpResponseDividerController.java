@@ -2,14 +2,19 @@ package com.lyj.backend.divider.controller;
 
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.domain.Type;
+import com.lyj.backend.divider.exception.InvalidUrlException;
+import com.lyj.backend.divider.exception.ResponseBodyReadFailException;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/response-divider")
@@ -34,5 +39,25 @@ public class HttpResponseDividerController {
     })
     public ResponseEntity<DivideResult> getDivideResult(@RequestParam String url, @RequestParam("type") Type type, @RequestParam int printUnit) {
         return ResponseEntity.ok().body(htmlDividerService.getDivideResult(url, type, printUnit));
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({MissingServletRequestParameterException.class, InvalidUrlException.class})
+    public Map<String, Object> handle(Exception e) {
+        LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
+        errorAttributes.put("status", 400);
+        errorAttributes.put("error", "Invalid Parameter");
+        errorAttributes.put("message", e.getMessage());
+        return errorAttributes;
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(ResponseBodyReadFailException.class)
+    public Map<String, Object> handle(ResponseBodyReadFailException e) {
+        LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
+        errorAttributes.put("status", 500);
+        errorAttributes.put("error", "Internal Server Error");
+        errorAttributes.put("message", e.getMessage());
+        return errorAttributes;
     }
 }

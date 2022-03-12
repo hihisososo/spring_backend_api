@@ -37,6 +37,33 @@ public class HttpResponseDividerControllerTest {
     }
 
     @Test
+    void invalidParameterTest() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/response-divider")
+                .param("url", "http://www.naver.com")
+                .param("type", "T")
+                .param("printUnit", "1"));
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void invalidUrlTest() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/response-divider")
+                .param("url", "httpps://wwwasdas.atest.ascom")
+                .param("type", "TEXT")
+                .param("printUnit", "1"));
+        perform.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void bodyReadFailTest() throws Exception {
+        ResultActions perform = mockMvc.perform(get("/response-divider")
+                .param("url", "http://www.smksnajzxcamsl.com")
+                .param("type", "TEXT")
+                .param("printUnit", "1"));
+        perform.andExpect(status().isInternalServerError());
+    }
+
+    @Test
     void noUrlParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("type", "TEXT")
