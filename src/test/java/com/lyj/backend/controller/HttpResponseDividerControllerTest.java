@@ -40,7 +40,7 @@ public class HttpResponseDividerControllerTest {
     void noUrlParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("type", "TEXT")
-                .param("printAmount", "1"));
+                .param("printUnit", "1"));
         perform.andExpect(status().isBadRequest());
     }
 
@@ -48,7 +48,7 @@ public class HttpResponseDividerControllerTest {
     void noTypeParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("url", "http://localhost:8083")
-                .param("printAmount", "1"));
+                .param("printUnit", "1"));
         perform.andExpect(status().isBadRequest());
     }
 
@@ -70,7 +70,7 @@ public class HttpResponseDividerControllerTest {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("url", "http://localhost:8083")
                 .param("type", "TEXT")
-                .param("printAmount", "1"));
+                .param("printUnit", "1"));
 
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("quotient").value("A"))
@@ -86,7 +86,7 @@ public class HttpResponseDividerControllerTest {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("url", "http://localhost:8083")
                 .param("type", "TEXT")
-                .param("printAmount", "1"));
+                .param("printUnit", "1"));
 
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("quotient").value("0"))
@@ -102,7 +102,7 @@ public class HttpResponseDividerControllerTest {
         ResultActions perform = mockMvc.perform(get("/response-divider")
                 .param("url", "http://localhost:8083")
                 .param("type", "TEXT")
-                .param("printAmount", "5"));
+                .param("printUnit", "5"));
 
         perform.andExpect(status().isOk())
                 .andExpect(jsonPath("quotient").value("A1a2a"))
