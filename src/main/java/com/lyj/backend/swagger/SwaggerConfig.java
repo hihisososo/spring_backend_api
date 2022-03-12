@@ -28,7 +28,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("Spring Boot REST API")
                 .version("1.0.0")
-                .description("swagger api")
+                .description("URL 파싱 후 데이터 가공 하기 API 문서")
                 .build();
     }
 }
