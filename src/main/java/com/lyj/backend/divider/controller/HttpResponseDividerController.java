@@ -6,6 +6,7 @@ import com.lyj.backend.divider.exception.InvalidUrlException;
 import com.lyj.backend.divider.exception.ResponseBodyReadFailException;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import io.swagger.annotations.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/response-divider")
+@Slf4j
 public class HttpResponseDividerController {
     public HttpResponseDividerService htmlDividerService;
 
@@ -38,12 +40,14 @@ public class HttpResponseDividerController {
             @ApiResponse(code = 500, message = "서버 에러")
     })
     public ResponseEntity<DivideResult> getDivideResult(@RequestParam String url, @RequestParam("type") Type type, @RequestParam int printUnit) {
+        log.debug("get /response-divider");
         return ResponseEntity.ok().body(htmlDividerService.getDivideResult(url, type, printUnit));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({MissingServletRequestParameterException.class, InvalidUrlException.class})
     public Map<String, Object> handle(Exception e) {
+        log.error(e.getMessage(), e);
         LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
         errorAttributes.put("status", 400);
         errorAttributes.put("error", "Invalid Parameter");
@@ -54,6 +58,7 @@ public class HttpResponseDividerController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ResponseBodyReadFailException.class)
     public Map<String, Object> handle(ResponseBodyReadFailException e) {
+        log.error(e.getMessage(), e);
         LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
         errorAttributes.put("status", 500);
         errorAttributes.put("error", "Internal Server Error");
