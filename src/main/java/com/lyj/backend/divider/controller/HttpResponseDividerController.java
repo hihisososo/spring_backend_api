@@ -1,6 +1,7 @@
 package com.lyj.backend.divider.controller;
 
 import com.lyj.backend.divider.domain.DivideResult;
+import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class HttpResponseDividerController {
     }
 
     @GetMapping
-    public ResponseEntity<DivideResult> getDivideResult(@RequestParam String url, @RequestParam String type, @RequestParam int printUnit) {
+    public ResponseEntity<DivideResult> getDivideResult(@RequestParam String url, @RequestParam("type") Type type, @RequestParam int printUnit) {
         return ResponseEntity.ok().body(htmlDividerService.getDivideResult(url, type, printUnit));
     }
 }

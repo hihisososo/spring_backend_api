@@ -1,5 +1,6 @@
 package com.lyj.backend.divider.service;
 
+import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.reader.ResponseBodyReader;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,12 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
     }
 
     @Override
-    public DivideResult getDivideResult(String url, String type, int printUnit) {
+    public DivideResult getDivideResult(String url, Enum<Type> type, int printUnit) {
         String responseBody = responseBodyReader.read(url);
 
-        switch (type) {
-            case "HTML":
-                responseBody = responseBody.replaceAll("<.*?>", "");
-                break;
-            case "TEXT":
-                break;
+
+        if (type == Type.HTML) {
+            responseBody = responseBody.replaceAll("<.*?>", "");
         }
 
         //정렬된 알파벳과 숫자 가져오기

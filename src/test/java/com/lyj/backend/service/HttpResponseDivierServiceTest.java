@@ -1,5 +1,6 @@
 package com.lyj.backend.service;
 
+import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.reader.ResponseBodyReader;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
@@ -23,8 +24,8 @@ public class HttpResponseDivierServiceTest {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("ABCDEFZabcdefz");
 
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader);
-        DivideResult divideResult = service.getDivideResult("http://localhost/test", "TEXT", 1);
-        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", "HTML", 1);
+        DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
+        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
 
         assertThat(divideResult.getQuotient(), is("A"));
         assertThat(divideResult.getRemainder(), is("aBbCcDdEeFfZz"));
@@ -37,8 +38,8 @@ public class HttpResponseDivierServiceTest {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("1357924680");
 
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader);
-        DivideResult divideResult = service.getDivideResult("http://localhost/test", "TEXT", 1);
-        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", "HTML", 1);
+        DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
+        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
 
         assertThat(divideResult.getQuotient(), is("0"));
         assertThat(divideResult.getRemainder(), is("123456789"));
@@ -51,8 +52,8 @@ public class HttpResponseDivierServiceTest {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("abcdABCD1234");
 
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader);
-        DivideResult divideResult = service.getDivideResult("http://localhost/test", "TEXT", 1);
-        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", "HTML", 1);
+        DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
+        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
 
         assertThat(divideResult.getQuotient(), is("A"));
         assertThat(divideResult.getRemainder(), is("1a2B3b4CcDd"));
@@ -65,8 +66,8 @@ public class HttpResponseDivierServiceTest {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("");
 
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader);
-        DivideResult divideResult = service.getDivideResult("http://localhost/test", "TEXT", 1);
-        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", "HTML", 1);
+        DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
+        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
 
         assertThat(divideResult.getQuotient(), is(""));
         assertThat(divideResult.getRemainder(), is(""));
@@ -79,8 +80,8 @@ public class HttpResponseDivierServiceTest {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("a<div>Ac</div>mk12<h2>a</h2>b");
 
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader);
-        DivideResult divideResult = service.getDivideResult("http://localhost/test", "TEXT", 5);
-        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", "HTML", 5);
+        DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 5);
+        DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 5);
 
         assertThat(divideResult.getQuotient(), is("A1a2a"));
         assertThat(divideResult.getRemainder(), is("2b2cddhhiikmvv"));
