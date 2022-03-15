@@ -39,7 +39,8 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
     }
 
     private String sort(String text) {
-        return Arrays.stream(text.split("")).sorted().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
+        return Arrays.stream(text.split("")).
+                sorted().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
     }
 
     private String mergeAlphabetAndNumber(String alphabets, String numbers) {
