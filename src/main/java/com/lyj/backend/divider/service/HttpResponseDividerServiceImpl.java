@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Service
 public class HttpResponseDividerServiceImpl implements HttpResponseDividerService {
@@ -27,8 +26,8 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         }
 
         //정렬된 알파벳과 숫자 가져오기
-        String alphabets = sort(remainAlphabetOnly(responseBody));
-        String numbers = sort(remainNumberOnly(responseBody));
+        String alphabets = sortAlphabet(remainAlphabetOnly(responseBody));
+        String numbers = sortNumber(remainNumberOnly(responseBody));
 
         //알파벳 + 숫자 + 나머지 조합 생성
         String alphabetNumberMerged = mergeAlphabetAndNumber(alphabets, numbers);
@@ -42,7 +41,7 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         return Arrays.stream(text.split("")).
                 sorted().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
     }
-
+  
     private String mergeAlphabetAndNumber(String alphabets, String numbers) {
 
         StringBuilder alphaNumSb = new StringBuilder();
