@@ -2,9 +2,9 @@ package com.lyj.backend.service;
 
 import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
-import com.lyj.backend.divider.reader.ResponseBodyReader;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import com.lyj.backend.divider.service.HttpResponseDividerServiceImpl;
+import com.lyj.backend.divider.util.HttpResponseReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class HttpResponseDivierServiceTest {
     @Mock
-    ResponseBodyReader responseBodyReader;
+    HttpResponseReader responseBodyReader;
 
     @Test
     public void onlyAlphabetTest(){
