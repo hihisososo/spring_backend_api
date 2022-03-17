@@ -3,6 +3,7 @@ package com.lyj.backend.divider.service;
 import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.util.HttpResponseReader;
+import com.lyj.backend.divider.util.TextFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -12,9 +13,11 @@ import java.util.stream.Collectors;
 @Service
 public class HttpResponseDividerServiceImpl implements HttpResponseDividerService {
     HttpResponseReader httpResponseReader;
+    TextFilter textFilter;
 
-    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader) {
+    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter) {
         this.httpResponseReader = httpResponseReader;
+        this.textFilter = textFilter;
     }
 
     @Override
@@ -26,8 +29,8 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         }
 
         //정렬된 알파벳과 숫자 가져오기
-        String alphabets = sort(remainAlphabetOnly(responseBody));
-        String numbers = sort(remainNumberOnly(responseBody));
+        String alphabets = sort(textFilter.remainAlphabet(responseBody));
+        String numbers = sort(textFilter.remainNumber(responseBody));
 
         //알파벳 + 숫자 + 나머지 조합 생성
         String alphabetNumberMerged = mergeAlphabetAndNumber(alphabets, numbers);
