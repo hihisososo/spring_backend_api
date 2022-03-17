@@ -2,7 +2,7 @@ package com.lyj.backend.divider.service;
 
 import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
-import com.lyj.backend.divider.reader.ResponseBodyReader;
+import com.lyj.backend.divider.util.HttpResponseReader;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -10,16 +10,15 @@ import java.util.Comparator;
 
 @Service
 public class HttpResponseDividerServiceImpl implements HttpResponseDividerService {
-    ResponseBodyReader responseBodyReader;
+    HttpResponseReader httpResponseReader;
 
-    public HttpResponseDividerServiceImpl(ResponseBodyReader responseBodyReader) {
-        this.responseBodyReader = responseBodyReader;
+    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader) {
+        this.httpResponseReader = httpResponseReader;
     }
 
     @Override
     public DivideResult getDivideResult(String url, Enum<Type> type, int printUnit) {
-        String responseBody = responseBodyReader.read(url);
-
+        String responseBody = httpResponseReader.read(url);
 
         if (type == Type.HTML) {
             responseBody = responseBody.replaceAll("<.*?>", "");
