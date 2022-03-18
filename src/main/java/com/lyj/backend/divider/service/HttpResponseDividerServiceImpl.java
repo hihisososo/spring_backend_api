@@ -3,6 +3,7 @@ package com.lyj.backend.divider.service;
 import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.util.HttpResponseReader;
+import com.lyj.backend.divider.util.TextAlternativelyMerger;
 import com.lyj.backend.divider.util.TextFilter;
 import com.lyj.backend.divider.util.TextSorter;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
     HttpResponseReader httpResponseReader;
     TextFilter textFilter;
     TextSorter textSorter;
+    TextAlternativelyMerger textAlternativelyMerger;
 
-    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter, TextSorter textSorter) {
+    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter, TextSorter textSorter, TextAlternativelyMerger textAlternativelyMerger) {
         this.httpResponseReader = httpResponseReader;
         this.textFilter = textFilter;
         this.textSorter = textSorter;
+        this.textAlternativelyMerger = textAlternativelyMerger;
     }
 
     @Override
@@ -34,31 +37,12 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         //정렬된 알파벳과 숫자 가져오기
         String alphabets = textSorter.sort(textFilter.remainAlphabet(responseBody));
         String numbers = textSorter.sort(textFilter.remainNumber(responseBody));
-
         //알파벳 + 숫자 + 나머지 조합 생성
-        String alphabetNumberMerged = mergeAlphabetAndNumber(alphabets, numbers);
+        String alphabetNumberMerged = textAlternativelyMerger.merge(alphabets, numbers);
 
         //몫, 나머지 계산 후 return
         return getDivideResult(alphabetNumberMerged, printUnit);
 
-    }
-
-    private String mergeAlphabetAndNumber(String alphabets, String numbers) {
-
-        StringBuilder alphaNumSb = new StringBuilder();
-        //알파벳 + 숫자 조합 생성
-        int minIdx = Math.min(numbers.length(), alphabets.length());
-        for (int i = 0; i < minIdx; i++) {
-            alphaNumSb.append(alphabets.charAt(i));
-            alphaNumSb.append(numbers.charAt(i));
-        }
-        //생성 후 남은 부분 이어붙이기
-        if (numbers.length() > alphabets.length()) {
-            alphaNumSb.append(numbers.substring(minIdx));
-        } else if (numbers.length() < alphabets.length()) {
-            alphaNumSb.append(alphabets.substring(minIdx));
-        }
-        return alphaNumSb.toString();
     }
 
     private DivideResult getDivideResult(String alphabetNumberMerged, int printUnit) {
