@@ -25,11 +25,11 @@ public class HttpResponseDivierServiceTest {
     private final TextFilter textFilter = new TextFilter();
     private final TextSorter textSorter = new TextSorter();
     private final TextAlternativelyMerger merger = new TextAlternativelyMerger();
-
+  
     @Test
     public void onlyAlphabetTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("ABCDEFZabcdefz");
-
+      
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
         DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
         DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
@@ -43,7 +43,7 @@ public class HttpResponseDivierServiceTest {
     @Test
     public void onlyNumberTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("1357924680");
-
+      
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
         DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
         DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
@@ -57,7 +57,7 @@ public class HttpResponseDivierServiceTest {
     @Test
     public void alphabetNumberTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("abcdABCD1234");
-
+      
         HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
         DivideResult divideResult = service.getDivideResult("http://localhost/test", Type.TEXT, 1);
         DivideResult divideResult2 = service.getDivideResult("http://localhost/test", Type.HTML, 1);
