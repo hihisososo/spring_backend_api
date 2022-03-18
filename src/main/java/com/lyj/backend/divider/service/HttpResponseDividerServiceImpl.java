@@ -4,6 +4,7 @@ import com.lyj.backend.divider.domain.Type;
 import com.lyj.backend.divider.domain.DivideResult;
 import com.lyj.backend.divider.util.HttpResponseReader;
 import com.lyj.backend.divider.util.TextFilter;
+import com.lyj.backend.divider.util.TextSorter;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -14,10 +15,12 @@ import java.util.stream.Collectors;
 public class HttpResponseDividerServiceImpl implements HttpResponseDividerService {
     HttpResponseReader httpResponseReader;
     TextFilter textFilter;
+    TextSorter textSorter;
 
-    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter) {
+    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter, TextSorter textSorter) {
         this.httpResponseReader = httpResponseReader;
         this.textFilter = textFilter;
+        this.textSorter = textSorter;
     }
 
     @Override
@@ -29,8 +32,8 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         }
 
         //정렬된 알파벳과 숫자 가져오기
-        String alphabets = sort(textFilter.remainAlphabet(responseBody));
-        String numbers = sort(textFilter.remainNumber(responseBody));
+        String alphabets = textSorter.sort(textFilter.remainAlphabet(responseBody));
+        String numbers = textSorter.sort(textFilter.remainNumber(responseBody));
 
         //알파벳 + 숫자 + 나머지 조합 생성
         String alphabetNumberMerged = mergeAlphabetAndNumber(alphabets, numbers);
@@ -40,11 +43,6 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
 
     }
 
-    private String sort(String text) {
-        return Arrays.stream(text.split("")).
-                sorted().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.joining());
-    }
-  
     private String mergeAlphabetAndNumber(String alphabets, String numbers) {
 
         StringBuilder alphaNumSb = new StringBuilder();
