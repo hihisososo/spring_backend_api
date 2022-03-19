@@ -4,6 +4,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,6 +37,7 @@ public class HttpResponseDividerControllerTest {
         mockBackEnd.shutdown();
     }
 
+    @DisplayName("타입 파라미터가 잘못되었을 경우, BadRequest 응답")
     @Test
     void invalidParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -45,6 +47,7 @@ public class HttpResponseDividerControllerTest {
         perform.andExpect(status().isBadRequest());
     }
 
+    @DisplayName("URL 포맷이 맞지 않을 경우, BadRequest 응답")
     @Test
     void invalidUrlTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -53,7 +56,8 @@ public class HttpResponseDividerControllerTest {
                 .param("printUnit", "1"));
         perform.andExpect(status().isBadRequest());
     }
-
+    
+    @DisplayName("없는 URL 호출하였을 경우, BadRequest 응답")
     @Test
     void bodyReadFailTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -63,6 +67,7 @@ public class HttpResponseDividerControllerTest {
         perform.andExpect(status().isInternalServerError());
     }
 
+    @DisplayName("URL 파라미터가 없을 경우, BadRequest 응답")
     @Test
     void noUrlParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -71,6 +76,7 @@ public class HttpResponseDividerControllerTest {
         perform.andExpect(status().isBadRequest());
     }
 
+    @DisplayName("출력형식 파라미터가 없을 경우, BadRequest 응답")
     @Test
     void noTypeParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -79,6 +85,7 @@ public class HttpResponseDividerControllerTest {
         perform.andExpect(status().isBadRequest());
     }
 
+    @DisplayName("출력단위 파라미터가 없을 경우, BadRequest 응답")
     @Test
     void noPrintAmountParameterTest() throws Exception {
         ResultActions perform = mockMvc.perform(get("/response-divider")
@@ -87,7 +94,7 @@ public class HttpResponseDividerControllerTest {
         perform.andExpect(status().isBadRequest());
     }
 
-
+    @DisplayName("알파벳으로만 이루어진 ResponseBody 에서 몫과 나머지를 구한다")
     @Test
     void onlyAlphabetTest() throws Exception {
         mockBackEnd.enqueue(new MockResponse()
@@ -100,10 +107,11 @@ public class HttpResponseDividerControllerTest {
                 .param("printUnit", "1"));
 
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("quotient").value("A"))
-                .andExpect(jsonPath("remainder").value("aBbCcDdEeFfZz"));
+                .andExpect(jsonPath("quotient").value("AaBbCcDdEeFfZz"))
+                .andExpect(jsonPath("remainder").value(""));
     }
 
+    @DisplayName("숫자로만 이루어진 ResponseBody 에서 몫과 나머지를 구한다")
     @Test
     void onlyNumberTest() throws Exception {
         mockBackEnd.enqueue(new MockResponse()
@@ -116,10 +124,11 @@ public class HttpResponseDividerControllerTest {
                 .param("printUnit", "1"));
 
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("quotient").value("0"))
-                .andExpect(jsonPath("remainder").value("123456789"));
+                .andExpect(jsonPath("quotient").value("0123456789"))
+                .andExpect(jsonPath("remainder").value(""));
     }
 
+    @DisplayName("숫자,알파벳,태그로 이루어진 ResponseBody 에서 몫과 나머지를 구한다")
     @Test
     void complexInputTest() throws Exception {
         mockBackEnd.enqueue(new MockResponse()
@@ -132,8 +141,8 @@ public class HttpResponseDividerControllerTest {
                 .param("printUnit", "5"));
 
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("quotient").value("A1a2a"))
-                .andExpect(jsonPath("remainder").value("2b2cddhhiikmvv"));
+                .andExpect(jsonPath("quotient").value("A1a2a2b2cddhhii"))
+                .andExpect(jsonPath("remainder").value("kmvv"));
     }
 
 }

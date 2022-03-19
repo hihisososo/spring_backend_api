@@ -24,7 +24,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class HttpResponseDividerController {
-    public HttpResponseDividerService htmlDividerService;
+    private final HttpResponseDividerService htmlDividerService;
 
     @GetMapping
     @ApiOperation(value = "URL 파싱 후 데이터 가공", notes = "URL, 출력타입, 출력단위를 받아 몫과 나머지를 출력합니다.")
