@@ -1,5 +1,6 @@
 package com.lyj.backend.divider.service;
 
+import com.lyj.backend.divider.dto.DivideRequest;
 import com.lyj.backend.divider.dto.PrintUnit;
 import com.lyj.backend.divider.dto.Type;
 import com.lyj.backend.divider.dto.DivideResult;
@@ -19,10 +20,10 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
     final TextAlternativelyMerger textAlternativelyMerger;
 
     @Override
-    public DivideResult getDivideResult(String url, Enum<Type> type, int printUnit) {
-        String responseBody = httpResponseReader.read(url);
+    public DivideResult getDivideResult(DivideRequest divideRequest) {
+        String responseBody = httpResponseReader.read(divideRequest.getUrl());
 
-        if (type == Type.HTML) {
+        if (divideRequest.getType() == Type.HTML) {
             responseBody = responseBody.replaceAll("<.*?>", "");
         }
 
@@ -33,7 +34,7 @@ public class HttpResponseDividerServiceImpl implements HttpResponseDividerServic
         String alphabetNumberMerged = textAlternativelyMerger.merge(alphabets, numbers);
 
         //몫, 나머지 계산 후 return
-        return new DivideResult(new PrintUnit(alphabetNumberMerged, printUnit));
+        return new DivideResult(new PrintUnit(alphabetNumberMerged, divideRequest.getPrintUnit()));
 
     }
 }
