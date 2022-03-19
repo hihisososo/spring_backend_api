@@ -44,25 +44,4 @@ public class HttpResponseDividerController {
         return ResponseEntity.ok().body(htmlDividerService.getDivideResult(url, type, printUnit));
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MissingServletRequestParameterException.class, InvalidUrlException.class})
-    public Map<String, Object> handle(Exception e) {
-        log.error(e.getMessage(), e);
-        LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
-        errorAttributes.put("status", 400);
-        errorAttributes.put("error", "Invalid Parameter");
-        errorAttributes.put("message", e.getMessage());
-        return errorAttributes;
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(ResponseBodyReadFailException.class)
-    public Map<String, Object> handle(ResponseBodyReadFailException e) {
-        log.error(e.getMessage(), e);
-        LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();
-        errorAttributes.put("status", 500);
-        errorAttributes.put("error", "Internal Server Error");
-        errorAttributes.put("message", e.getMessage());
-        return errorAttributes;
-    }
 }
