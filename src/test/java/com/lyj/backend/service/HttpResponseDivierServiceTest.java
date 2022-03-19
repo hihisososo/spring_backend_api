@@ -9,6 +9,9 @@ import com.lyj.backend.divider.util.HttpResponseReader;
 import com.lyj.backend.divider.util.TextAlternativelyMerger;
 import com.lyj.backend.divider.util.TextFilter;
 import com.lyj.backend.divider.util.TextSorter;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -26,54 +29,61 @@ public class HttpResponseDivierServiceTest {
     private final TextFilter textFilter = new TextFilter();
     private final TextSorter textSorter = new TextSorter();
     private final TextAlternativelyMerger merger = new TextAlternativelyMerger();
-  
+    private HttpResponseDividerService service;
+
+    @BeforeEach
+    void init(){
+        this.service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
+    }
+
+
+    @DisplayName("알파벳만 있는 응답일 경우에 Type 별로 알맞은 결과 확인")
     @Test
     public void onlyAlphabetTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("ABCDEFZabcdefz");
-      
-        HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
-        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 1));
-        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 1));
 
-        assertThat(divideResult.getQuotient(), is("A"));
-        assertThat(divideResult.getRemainder(), is("aBbCcDdEeFfZz"));
-        assertThat(divideResult2.getQuotient(), is("A"));
-        assertThat(divideResult2.getRemainder(), is("aBbCcDdEeFfZz"));
+        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 2));
+        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 2));
+
+        assertThat(divideResult.getQuotient(), is("AaBbCcDdEeFfZz"));
+        assertThat(divideResult.getRemainder(), is(""));
+        assertThat(divideResult2.getQuotient(), is("AaBbCcDdEeFfZz"));
+        assertThat(divideResult2.getRemainder(), is(""));
     }
 
+    @DisplayName("숫자만 있는 응답일 경우에 Type 별로 알맞은 결과 확인")
     @Test
     public void onlyNumberTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("1357924680");
-      
-        HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
-        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 1));
-        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 1));
 
-        assertThat(divideResult.getQuotient(), is("0"));
-        assertThat(divideResult.getRemainder(), is("123456789"));
-        assertThat(divideResult2.getQuotient(), is("0"));
-        assertThat(divideResult2.getRemainder(), is("123456789"));
+        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 3));
+        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 3));
+
+        assertThat(divideResult.getQuotient(), is("012345678"));
+        assertThat(divideResult.getRemainder(), is("9"));
+        assertThat(divideResult2.getQuotient(), is("012345678"));
+        assertThat(divideResult2.getRemainder(), is("9"));
     }
 
+    @DisplayName("알파벳,숫자가 섞인 응답일 경우에 Type 별로 알맞은 결과 확인")
     @Test
     public void alphabetNumberTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("abcdABCD1234");
-      
-        HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
-        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 1));
-        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 1));
 
-        assertThat(divideResult.getQuotient(), is("A"));
-        assertThat(divideResult.getRemainder(), is("1a2B3b4CcDd"));
-        assertThat(divideResult2.getQuotient(), is("A"));
-        assertThat(divideResult2.getRemainder(), is("1a2B3b4CcDd"));
+        DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 5));
+        DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 5));
+
+        assertThat(divideResult.getQuotient(), is("A1a2B3b4Cc"));
+        assertThat(divideResult.getRemainder(), is("Dd"));
+        assertThat(divideResult2.getQuotient(), is("A1a2B3b4Cc"));
+        assertThat(divideResult2.getRemainder(), is("Dd"));
     }
 
+    @DisplayName("빈 응답일 경우에 Type 별로 알맞은 결과 확인")
     @Test
     public void emptyInputTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("");
 
-        HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
         DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 1));
         DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 1));
 
@@ -83,16 +93,16 @@ public class HttpResponseDivierServiceTest {
         assertThat(divideResult2.getRemainder(), is(""));
     }
 
+    @DisplayName("여러 문자가 섞인 응답일 경우에 Type 별로 알맞은 결과 확인")
     @Test
     public void complexInputTest() {
         when(responseBodyReader.read("http://localhost/test")).thenReturn("a<div>Ac</div>mk12<h2>a</h2>b");
 
-        HttpResponseDividerService service = new HttpResponseDividerServiceImpl(responseBodyReader, textFilter, textSorter, merger);
         DivideResult divideResult = service.getDivideResult(new DivideRequest("http://localhost/test", Type.TEXT, 5));
         DivideResult divideResult2 = service.getDivideResult(new DivideRequest("http://localhost/test", Type.HTML, 5));
 
-        assertThat(divideResult.getQuotient(), is("A1a2a"));
-        assertThat(divideResult.getRemainder(), is("2b2cddhhiikmvv"));
+        assertThat(divideResult.getQuotient(), is("A1a2a2b2cddhhii"));
+        assertThat(divideResult.getRemainder(), is("kmvv"));
         assertThat(divideResult2.getQuotient(), is("A1a2a"));
         assertThat(divideResult2.getRemainder(), is("bckm"));
     }
