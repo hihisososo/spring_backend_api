@@ -1,7 +1,9 @@
 package com.lyj.backend.divider.dto;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
 
+@Getter
 public class DivideResult {
     @ApiModelProperty(example = "A0a1B2")
     private String quotient;
@@ -13,11 +15,4 @@ public class DivideResult {
         this.remainder = printUnit.getRemainder();
     }
 
-    public String getQuotient() {
-        return quotient;
-    }
-
-    public String getRemainder() {
-        return remainder;
-    }
 }
