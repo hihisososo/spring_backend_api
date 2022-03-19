@@ -1,4 +1,4 @@
-package com.lyj.backend.divider.domain;
+package com.lyj.backend.divider.dto;
 
 public enum Type {
     HTML("HTML"), TEXT("TEXT");
