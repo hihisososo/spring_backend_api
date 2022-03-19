@@ -29,7 +29,7 @@ public class HttpResponseDividerController {
             @ApiResponse(code = 400, message = "잘못된 파라미터"),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    public ResponseEntity<DivideResult> getDivideResult(@RequestParam @Valid DivideRequest divideRequest) {
+    public ResponseEntity<DivideResult> getDivideResult(@Valid DivideRequest divideRequest) {
         log.debug("get /response-divider");
         return ResponseEntity.ok().body(htmlDividerService.getDivideResult(divideRequest));
     }
