@@ -1,5 +1,6 @@
 package com.lyj.backend.divider.dto;
 
+import com.lyj.backend.divider.strategy.Type;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
