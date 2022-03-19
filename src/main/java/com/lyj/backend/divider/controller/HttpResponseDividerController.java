@@ -6,6 +6,7 @@ import com.lyj.backend.divider.exception.InvalidUrlException;
 import com.lyj.backend.divider.exception.ResponseBodyReadFailException;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,13 +20,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/response-divider")
 @Slf4j
+@RequiredArgsConstructor
 public class HttpResponseDividerController {
     public HttpResponseDividerService htmlDividerService;
-
-    @Autowired
-    public void setHtmlDividerService(HttpResponseDividerService htmlDividerService) {
-        this.htmlDividerService = htmlDividerService;
-    }
 
     @GetMapping
     @ApiOperation(value = "URL 파싱 후 데이터 가공", notes = "URL, 출력타입, 출력단위를 받아 몫과 나머지를 출력합니다.")
