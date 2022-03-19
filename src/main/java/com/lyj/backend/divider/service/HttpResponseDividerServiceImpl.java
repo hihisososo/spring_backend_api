@@ -7,21 +7,16 @@ import com.lyj.backend.divider.util.HttpResponseReader;
 import com.lyj.backend.divider.util.TextAlternativelyMerger;
 import com.lyj.backend.divider.util.TextFilter;
 import com.lyj.backend.divider.util.TextSorter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class HttpResponseDividerServiceImpl implements HttpResponseDividerService {
-    HttpResponseReader httpResponseReader;
-    TextFilter textFilter;
-    TextSorter textSorter;
-    TextAlternativelyMerger textAlternativelyMerger;
-
-    public HttpResponseDividerServiceImpl(HttpResponseReader httpResponseReader, TextFilter textFilter, TextSorter textSorter, TextAlternativelyMerger textAlternativelyMerger) {
-        this.httpResponseReader = httpResponseReader;
-        this.textFilter = textFilter;
-        this.textSorter = textSorter;
-        this.textAlternativelyMerger = textAlternativelyMerger;
-    }
+    final HttpResponseReader httpResponseReader;
+    final TextFilter textFilter;
+    final TextSorter textSorter;
+    final TextAlternativelyMerger textAlternativelyMerger;
 
     @Override
     public DivideResult getDivideResult(String url, Enum<Type> type, int printUnit) {
