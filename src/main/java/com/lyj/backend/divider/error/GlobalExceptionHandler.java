@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handle(Exception e) {
         log.error(e.getMessage(), e);
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .badRequest()
                 .body(new ErrorResponse(400, "Invalid Parameter", e.getMessage()));
     }
 }

@@ -1,8 +1,10 @@
 package com.lyj.backend.divider.error;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Getter
 @Setter
 @RequiredArgsConstructor
 public class ErrorResponse {
