@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({MissingServletRequestParameterException.class, InvalidUrlException.class})
+    @ExceptionHandler({MissingServletRequestParameterException.class, InvalidUrlException.class, PrintUnitInvalidException.class, UnknownTypeParameterException.class})
     public Map<String, Object> handle(Exception e) {
         log.error(e.getMessage(), e);
         LinkedHashMap<String, Object> errorAttributes = new LinkedHashMap<>();

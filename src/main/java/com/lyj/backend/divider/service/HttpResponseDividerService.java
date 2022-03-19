@@ -1,7 +1,6 @@
 package com.lyj.backend.divider.service;
 
 import com.lyj.backend.divider.dto.DivideRequest;
-import com.lyj.backend.divider.dto.Type;
 import com.lyj.backend.divider.dto.DivideResult;
 
 public interface HttpResponseDividerService {
