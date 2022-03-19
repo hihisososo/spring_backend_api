@@ -1,5 +1,6 @@
 package com.lyj.backend.divider.controller;
 
+import com.lyj.backend.divider.dto.DivideRequest;
 import com.lyj.backend.divider.dto.DivideResult;
 import com.lyj.backend.divider.dto.Type;
 import com.lyj.backend.divider.exception.InvalidUrlException;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -35,9 +37,9 @@ public class HttpResponseDividerController {
             @ApiResponse(code = 400, message = "잘못된 파라미터"),
             @ApiResponse(code = 500, message = "서버 에러")
     })
-    public ResponseEntity<DivideResult> getDivideResult(@RequestParam String url, @RequestParam("type") Type type, @RequestParam int printUnit) {
+    public ResponseEntity<DivideResult> getDivideResult(@RequestParam @Valid DivideRequest divideRequest) {
         log.debug("get /response-divider");
-        return ResponseEntity.ok().body(htmlDividerService.getDivideResult(url, type, printUnit));
+        return ResponseEntity.ok().body(htmlDividerService.getDivideResult(divideRequest));
     }
 
 }
