@@ -1,7 +1,7 @@
 package com.lyj.backend.service;
 
-import com.lyj.backend.divider.domain.DivideResult;
-import com.lyj.backend.divider.domain.Type;
+import com.lyj.backend.divider.dto.DivideResult;
+import com.lyj.backend.divider.dto.Type;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
 import com.lyj.backend.divider.service.HttpResponseDividerServiceImpl;
 import com.lyj.backend.divider.util.HttpResponseReader;

@@ -1,7 +1,7 @@
 package com.lyj.backend.divider.controller;
 
-import com.lyj.backend.divider.domain.DivideResult;
-import com.lyj.backend.divider.domain.Type;
+import com.lyj.backend.divider.dto.DivideResult;
+import com.lyj.backend.divider.dto.Type;
 import com.lyj.backend.divider.exception.InvalidUrlException;
 import com.lyj.backend.divider.exception.ResponseBodyReadFailException;
 import com.lyj.backend.divider.service.HttpResponseDividerService;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
